@@ -90,11 +90,11 @@ public class Main
 
             csvWriter.writeNext(header); // TODO: Nodig?
 
+            Pattern r = Pattern.compile(pattern);
+
             while (br.readLine() != null && count < 150)
             {
                 String nextLine = br.readLine();
-
-                Pattern r = Pattern.compile(pattern);
 
                 Matcher matcher = r.matcher(nextLine);
 
