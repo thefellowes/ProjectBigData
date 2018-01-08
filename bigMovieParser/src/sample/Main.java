@@ -31,7 +31,7 @@ public class Main
         switch (choice)
         {
             case "countries":
-                pattern = "";   //"\W(.*?)\"?\\s\\((\\d{4}|\\?\\?\\?\\?|\\d{4}\\/.*)\\)\\s*(\\((.*)\\))?\\s*(\\{([^\\{}]*)\\})?\\s(\\{\\{(SUSPENDED)\\}\\})?\\s*(.*)";
+                pattern = "";    //								\"\W(.+?)"\s\(([A-Za-z0-9?I\/_.]+?)\)(?(?=\s\{\{)\s\{\{(.+?)\}\})(?(?=\s\{)\s\{(.+?)\s\(\#(.+?)\)\}\s*(.+)|\s*(.+))
                 substitution = "$1-$2-$4-$6-$8-$9";
                 header = new String[]{};
                 break;
@@ -79,7 +79,7 @@ public class Main
                 pattern = "";
                 substitution = "";
                 header = new String[]{};
-                System.out.println("List not found!");
+                System.out.println("File not found");
                 System.exit(0);
                 break;
         }
