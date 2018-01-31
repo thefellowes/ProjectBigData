@@ -1,0 +1,64 @@
+import java.io.*;
+import java.net.URLEncoder;
+import javax.xml.parsers.*;
+import javax.xml.xpath.*;
+import static javax.xml.xpath.XPathConstants.*;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+public class geoLocator {
+    // Needed to encode the given query string to be used in the url
+    private static final String CHAR_ENCODING = "UTF-8";
+    private static final String FIRST_RESULT_XPATH = "/GeocodeResponse/result[1]";
+    private static final String LAT_XPATH =
+            "/GeocodeResponse/result[1]/geometry/location/lat";
+    private static final String LNG_XPATH =
+            "/GeocodeResponse/result[1]/geometry/location/lng";
+
+    // Needs an location string, then return a valid geoLocation based on the location data if it can find any.
+    public static GeoLocation find(String location) {
+        String urlString =
+                "https://maps.googleapis.com/maps/api/geocode/xml?sensor=false&address="
+                        + urlEncodeUTF8(location);
+
+        try {
+            // Lotsa parsing objects... Getting the factory build
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(urlString);
+            XPathFactory xPathfactory = XPathFactory.newInstance();
+            XPath xpath = xPathfactory.newXPath();
+
+            // Get the first result in the XML document, bail if no results
+            XPathExpression resultElementPath = xpath.compile(FIRST_RESULT_XPATH);
+            String firstResult = (String) resultElementPath.evaluate(doc, STRING);
+            if (null == firstResult || "".equals(firstResult)) {
+                // No results found for query.
+                return null;
+            }
+
+            // At least one search result, continue
+            XPathExpression latPathExp = xpath.compile(LAT_XPATH);
+            XPathExpression lngPathExp = xpath.compile(LNG_XPATH);
+            Double lat = (Double) latPathExp.evaluate(doc, NUMBER);
+            Double lng = (Double) lngPathExp.evaluate(doc, NUMBER);
+            return new GeoLocation(lat, lng);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    // URL-encodes the given String, swallows impossible exception.
+    private static String urlEncodeUTF8(String toEncode) {
+        try {
+            return URLEncoder.encode(toEncode, CHAR_ENCODING);
+        }
+        catch(UnsupportedEncodingException uee) {
+            System.err.println("Unable to encode, charset " +
+                    CHAR_ENCODING + " is unsupported.");
+            return toEncode;
+        }
+    }
+}

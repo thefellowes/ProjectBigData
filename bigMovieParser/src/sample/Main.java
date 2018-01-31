@@ -110,5 +110,10 @@ public class Main
                 count++;
             }
         }
+        catch(Exception e{
+            System.out.println(e);
+            String location = "Nij Beets";
+            GeoLocation(String location);
+        }
     }
 }

@@ -4,6 +4,15 @@ Countries
 https://regex101.com/r/Nw7k3w/1
 
 
-Actors (actrisses untested, should be about the same)
+Actors
 ('(.+?)(' |',)|)((.+?)\,|)(\,|$|)((.+?)|)(\t+)(.+)\s\(([0-9]{4}|\?\?\?\?)((.*)\)(.+|)(\[(.+?)\])|).*
+\5 \8 \10 \11 \16 \13
 https://regex101.com/r/cYHUuL/1
+
+Actresses (same as actors)
+https://regex101.com/r/3257b2/1
+
+Directors
+(.+)\t(.+?)\(([0-9\?\/\A-Z]+)\)(?(?=\s\{\{)(.+))(?(?=\s\{)\s\{(.+)\(\#(.+?)\)\})(?(?=\()\s\((.+?)\))(.+)?
+\1 \2 \3 \4 \5 \6 \7 \8
+https://regex101.com/r/KlhPEk/1
